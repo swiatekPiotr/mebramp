@@ -1,0 +1,22 @@
+{% extends 'main/base.html' %}
+
+{% block title %} {{ name_cat.title }} {% endblock %}
+
+{% block content %}
+<br>
+<div class="card">
+    <div class="card-header">
+        {{ name_cat.title }}:
+    </div>
+    <div class="card-body">
+        {% for product in products %}
+            {% if product.category_id == name_cat.id %}
+                <ul>{{ product.name }}</ul>
+                <ul><img src="{{ product.product_image1.url }}" width=500></ul>
+                <ul>{{ product.price }}</ul>
+                <br>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
