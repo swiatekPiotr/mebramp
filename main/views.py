@@ -6,6 +6,15 @@ def home(request):
     return render(request, 'main/home.html', {})
 
 
+def search(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        products = Products.objects.filter(name__contains=searched)
+        return render(request, 'main/search.html', {'searched': searched, 'products': products})
+    else:
+        return render(request, 'main/search.html', {})
+
+
 def category(request, id):
     name_cat = Categories.objects.get(id=id)
     products = Products.objects.all()
