@@ -4,19 +4,31 @@
 
 {% block content %}
 <br>
-<div class="card">
-    <div class="card-header">
-        {{ name_cat.title }}:
+<div class="container">
+  <div class="row align-items-center">
+    <div>
+      <h3 style="color: #3A7525; font-weight: bold; text-shadow: 2px 2px 0px #FFFFFF,
+      5px 4px 0px rgba(0,0,0,0.15),-40px -40px 20px rgba(206,122,111,0);"> {{ name_cat.title }}: </h3>
     </div>
-    <div class="card-body">
-        {% for product in products %}
-            {% if product.category_id == name_cat.id %}
-                <ul>{{ product.name }}</ul>
-                <ul><img src="{{ product.product_image1.url }}" width=500></ul>
-                <ul>{{ product.price }}</ul>
-                <br>
-            {% endif %}
-        {% endfor %}
-    </div>
+    {% for product in products %}
+      {% if product.category_id == name_cat.id %}
+        <div class="col">
+          <a style="color: #3A7525; font-weight: bold; text-decoration: none;" title="view this product"
+             href="product/{{ product.id }}"> {{ product.name }} </a>
+          <br>
+          {% if product.category_id == 2 or product.category_id == 4 %}
+            <a title="view this product" href="product/{{ product.id }}">
+              <img width=420 height="210" src="{{ product.product_image1.url }}">
+            </a>
+          {% else %}
+            <a title="view this product" href="product/{{ product.id }}">
+              <img width=320 src="{{ product.product_image1.url }}">
+            </a>
+          {% endif %}
+            <p style="text-shadow: 2px 2px 4px #AF290B;"> {{ product.price }} zł </p>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}
