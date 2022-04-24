@@ -1,13 +1,72 @@
 {% extends 'main/base.html' %}
 
-
-{% block title %} {{single_product.name}} {% endblock %}
+{% block title %} {{ single_product.name }} {% endblock %}
 
 {% block content %}
 <div class="container">
-    <div>
-        <img width=1000 src="{{ single_product.product_image1.url }}">
+  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        {% if single_product.category_id == 3 or single_product.category_id == 6 %}
+          <img width=530 src="{{ single_product.product_image1.url }}">
+        {% else %}
+          <img width=900 src="{{ single_product.product_image1.url }}">
+        {% endif %}
+      </div>
+      <div class="carousel-item">
+        {% if single_product.category_id == 3 or single_product.category_id == 6 %}
+          <img width=530 src="{{ single_product.product_image2.url }}">
+        {% else %}
+          <img width=900 src="{{ single_product.product_image2.url }}">
+        {% endif %}
+      </div>
     </div>
-    <h1> {{single_product.name}} </h1>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+  </div>
+  <br>
+  <h1> {{ single_product.name }} </h1>
+  <div class="row" style="background-color: rgba(58,117,37,0.05);">
+    <div class="col">
+      <p> Textile: </p>
+      {{ single_product.textile }}
+    </div>
+    <div class="col"></div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-4 align-self-center" style="color: #3A7525;">
+      <h5 style="font-weight: bold;"> {{ single_product.name }} </h5>
+      <p> {{ single_product.description }} </p>
+    </div>
+    <div class="col-8">
+      {% if single_product.product_image3 %}
+        <img width=420 src="{{ single_product.product_image3.url }}">
+      {% else %}
+        <img width=420 src="{{ single_product.product_image1.url }}">
+      {% endif %}
+    </div>
+  </div>
+  <br>
+  <div class="row justify-content-start">
+    <div class="col-6" style="color: #3A7525; font-weight: bold;">
+      <h5> Others from this category: </h5>
+    </div>
+    <div class="swiper-slide swiper-slide-active">
+      {% for product in products %}
+        {% if product.category_id == single_product.category_id and product.id != single_product.id %}
+          <a title="view this product" href="{{ product.id }}">
+              <img height="180" src="{{ product.product_image1.url }}">
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -23,4 +23,5 @@ def category(request, id):
 
 def product(request, id):
     single_product = Products.objects.get(id=id)
-    return render(request, 'main/product.html', {'single_product': single_product})
+    products = Products.objects.all()
+    return render(request, 'main/product.html', {'single_product': single_product, 'products': products})
