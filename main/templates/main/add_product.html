@@ -2,12 +2,10 @@
 
 {% block title %} Add product {% endblock %}
 
-{% load crispy_forms_tags %}
-
 {% block content %}
-    <h1> Add Product to Databse </h1>
+    <h1> Add Product to Database </h1>
     <form method="POST">
-            {% csrf_token %}{{ form|crispy }}
+            {% csrf_token %}{{ form.as_p }}
             <a style="color: gray; font-size: 14px"> * these fields are required <br></a>
             <button type="submit" class="btn btn-success"> Add </button>
     </form>
