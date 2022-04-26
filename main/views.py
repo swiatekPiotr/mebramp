@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Categories, Products
+from .forms import ProductsForm
 
 
 def home(request):
@@ -25,3 +26,16 @@ def product(request, id):
     single_product = Products.objects.get(id=id)
     products = Products.objects.all()
     return render(request, 'main/product.html', {'single_product': single_product, 'products': products})
+
+
+def add_product(request):
+    if request.method == "POST":
+        form = ProductsForm(request.POST)
+        if form.is_valid():
+            add = form.save(commit=False)
+            add.user = request.user
+            add.save()
+            return redirect('/add_product')
+    else:
+        form = ProductsForm()
+    return render(request, 'main/add_product.html', {'form': form})

@@ -12,22 +12,26 @@
     </div>
     {% for product in products %}
       {% if product.category_id == name_cat.id %}
-        <div class="col">
-          <a style="color: #3A7525; font-weight: bold; text-decoration: none;" title="view this product"
-             href="product/{{ product.id }}"> {{ product.name }} </a>
-          <br>
-          {% if product.category_id == 2 or product.category_id == 4 %}
-            <a title="view this product" href="product/{{ product.id }}">
-              <img width=420 height="210" src="{{ product.product_image1.url }}">
-            </a>
-          {% else %}
-            <a title="view this product" href="product/{{ product.id }}">
-              <img width=320 src="{{ product.product_image1.url }}">
-            </a>
-          {% endif %}
-            <p style="text-shadow: 2px 2px 4px #AF290B;"> {{ product.price }} zł </p>
-        </div>
+        {% if product.product_image1 %}
+          <div class="col">
+            <a style="color: #3A7525; font-weight: bold; text-decoration: none;" title="view this product"
+               href="product/{{ product.id }}"> {{ product.name }} </a>
+            <br>
+            {% if product.category_id == 2 or product.category_id == 4 %}
+              <a title="view this product" href="product/{{ product.id }}">
+                <img width=420 height="210" src="{{ product.product_image1.url }}">
+              </a>
+            {% else %}
+              <a title="view this product" href="product/{{ product.id }}">
+                <img width=320 src="{{ product.product_image1.url }}">
+              </a>
+            {% endif %}
+              <p style="text-shadow: 2px 2px 4px #AF290B;"> {{ product.price }} zł </p>
+          </div>
+        {% endif %}
       {% endif %}
+    {% empty %}
+      <p style="color: red; font-weight: bold;"> We don't offer products of this category! </p>
     {% endfor %}
   </div>
 </div>
