@@ -39,3 +39,17 @@ def add_product(request):
     else:
         form = ProductsForm()
     return render(request, 'main/add_product.html', {'form': form})
+
+
+def update_product(request, product_id=None):
+    if product_id is None:
+        products = Products.objects.all()
+        return render(request, 'main/update_product.html', {'products': products})
+    else:
+        update_product_obj = Products.objects.get(id=product_id)
+        form = ProductsForm(request.POST or None, instance=update_product_obj)
+        if form.is_valid():
+            form.save()
+        return render(request, 'main/update_product.html',
+                      {'update_product_obj': update_product_obj,
+                       'form': form})

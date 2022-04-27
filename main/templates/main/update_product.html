@@ -1,0 +1,45 @@
+{% extends 'main/base.html' %}
+
+{% block title %} Update product {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-md-center">
+            {% if products %}
+                <h1> Update Product from Database List: </h1>
+                <br>
+                <div class="col-6">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col"> ID </th>
+                                <th scope="col"> Name Product </th>
+                                <th scope="col">  </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in products %}
+                            <tr>
+                                <th scope="row"> {{ product.id }} </th>
+                                <td> <a style="color: #3A7525; font-weight: bold; text-decoration: none;" title="view this product"
+                                   href="product/{{ product.id }}"> {{ product.name }} </a>
+                                </td>
+                                <td align="center"> <a class="btn btn-outline-secondary btn-sm"
+                                                       href="/update_product/{{ product.id }}"> Update </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <h1> Update Product '{{ update_product_obj.name }}' </h1>
+                <br>
+                <form method="POST">
+                    {% csrf_token %}{{ form.as_p }}
+                    <button type="submit" class="btn btn-danger"> Update </button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
