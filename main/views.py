@@ -2,6 +2,12 @@ from django.shortcuts import render, redirect
 from .models import Categories, Products
 from .forms import ProductsForm
 
+from django.http import FileResponse
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import letter
+
 
 def home(request):
     return render(request, 'main/home.html', {})
@@ -53,3 +59,30 @@ def update_product(request, product_id=None):
         return render(request, 'main/update_product.html',
                       {'update_product_obj': update_product_obj,
                        'form': form})
+
+
+def product_pdf(request, id):
+    single_product = Products.objects.get(id=id)
+
+    # create Bytestream buffer
+    buf = io.BytesIO()
+    # create a canvas
+    c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+    # create a text object
+    textobj = c.beginText()
+    textobj.setTextOrigin(inch, inch)
+    textobj.setFont("Helvetica", 14)
+
+    # create blank list
+    lines = [single_product.name, single_product.textile, single_product.description, ]
+
+    # loop
+    for line in lines:
+        textobj.textLine(line)
+
+    # finish up
+    c.drawText(textobj)
+    c.showPage()
+    c.save()
+    buf.seek(0)
+    return FileResponse(buf, as_attachment=True, filename=single_product.name+'.pdf')
