@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect
 from .models import Categories, Products
 from .forms import ProductsForm
 
-from django.http import FileResponse
+from django.http import FileResponse, HttpResponse
 import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
+import csv
 
 
 def home(request):
@@ -86,3 +87,20 @@ def product_pdf(request, id):
     c.save()
     buf.seek(0)
     return FileResponse(buf, as_attachment=True, filename=single_product.name+'.pdf')
+
+
+def products_csv(request):
+    products = Products.objects.all()
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=products.csv'
+
+    # create csv writer
+    writer = csv.writer(response)
+
+    # add column headings to csv file
+    writer.writerow(['product id', 'product name', 'price', 'category id', 'description'])
+
+    # loop thu and output
+    for i in products:
+        writer.writerow([i.id, i.name, i.price, i.category_id, i.description])
+    return response

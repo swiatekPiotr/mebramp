@@ -73,7 +73,7 @@
       {% for product in products %}
         {% if product.category_id == single_product.category_id and product.id != single_product.id %}
           <a title="view this product" href="{{ product.id }}">
-              <img height="180" src="{{ product.product_image1.url }}">
+              <img height="170" src="{{ product.product_image1.url }}">
           </a>
         {% endif %}
       {% endfor %}
