@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Categories, Products
 from .forms import ProductsForm
+from django.contrib.auth.decorators import login_required
 
 from django.http import FileResponse, HttpResponse
 import io
@@ -35,6 +36,7 @@ def product(request, id):
     return render(request, 'main/product.html', {'single_product': single_product, 'products': products})
 
 
+@login_required(login_url='/home')
 def add_product(request):
     if request.method == "POST":
         form = ProductsForm(request.POST)
@@ -48,6 +50,7 @@ def add_product(request):
     return render(request, 'main/add_product.html', {'form': form})
 
 
+@login_required(login_url='/home')
 def update_product(request, product_id=None):
     if product_id is None:
         products = Products.objects.all()
