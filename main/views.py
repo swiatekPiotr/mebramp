@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Categories, Products
 from .forms import ProductsForm
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 from django.http import FileResponse, HttpResponse
 import io
@@ -12,7 +13,10 @@ import csv
 
 
 def home(request):
-    return render(request, 'main/home.html', {})
+    p = Paginator(Products.objects.all().order_by('?'), 6)
+    page = request.GET.get('page')
+    products = p.get_page(page)
+    return render(request, 'main/home.html', {'products': products})
 
 
 def search(request):
@@ -53,7 +57,7 @@ def add_product(request):
 @login_required(login_url='/home')
 def update_product(request, product_id=None):
     if product_id is None:
-        products = Products.objects.all()
+        products = Products.objects.all().order_by('-id')
         return render(request, 'main/update_product.html', {'products': products})
     else:
         update_product_obj = Products.objects.get(id=product_id)
