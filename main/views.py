@@ -3,6 +3,7 @@ from .models import Categories, Products
 from .forms import ProductsForm
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.core.mail import send_mail
 
 from django.http import FileResponse, HttpResponse
 import io
@@ -16,6 +17,13 @@ def home(request):
     p = Paginator(Products.objects.all().order_by('?'), 6)
     page = request.GET.get('page')
     products = p.get_page(page)
+
+    if request.method == "POST":
+        message_name = request.POST['message-name']
+        message_email = request.POST['message-email']
+        message = request.POST['message']
+        send_mail(message_name, message, message_email, ['mebramp@gmail.com'])
+        return render(request, 'main/home.html', {'message_name': message_name})
     return render(request, 'main/home.html', {'products': products})
 
 
