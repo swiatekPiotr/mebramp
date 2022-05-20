@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Categories, Products
 from .forms import ProductsForm
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
@@ -56,6 +57,7 @@ def add_product(request):
             add = form.save(commit=False)
             add.user = request.user
             add.save()
+            messages.success(request, "Product has been submitted Successfully!")
             return redirect('/add_product')
     else:
         form = ProductsForm()
@@ -72,6 +74,7 @@ def update_product(request, product_id=None):
         form = ProductsForm(request.POST or None, instance=update_product_obj)
         if form.is_valid():
             form.save()
+            messages.success(request, "Product has been updated Successfully!")
         return render(request, 'main/update_product.html',
                       {'update_product_obj': update_product_obj,
                        'form': form})
